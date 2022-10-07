@@ -25,17 +25,11 @@ jobs:
                 uses: "./"
                 with:
                     package_path: 'tests/packages/dummy'
-                    ssh_private_key: ${{ secrets.SPLIT_SSH_PRIVATE_KEY }}
+                    ssh_private_key: ${{ secrets.DEMO_DEPLOY_KEY }}
                     git_username: 'jakubtobiasz'
                     git_email: 'jakub.tobiasz@icloud.com'
-                    repository_owner: 'jakubtobiasz'
-                    repository_name: 'monoplus-split-dummy'
-
-            -
-                if: "startsWith(github.ref, 'refs/tags/')"
-                name: Extract tag
-                id: extract_tag
-                run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+                    repository_owner: 'alphpaca'
+                    repository_name: 'monoplus-split-demo'
 
     split_with_tag:
         runs-on: ubuntu-latest
@@ -51,16 +45,16 @@ jobs:
             -
                 name: Extract tag
                 id: extract_tag
-                run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+                run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
 
             -
                 name: Split (With Tag)
                 uses: "./"
                 with:
                     package_path: 'tests/packages/dummy'
-                    ssh_private_key: ${{ secrets.SPLIT_SSH_PRIVATE_KEY }}
+                    ssh_private_key: ${{ secrets.DEMO_DEPLOY_KEY }}
                     git_username: 'jakubtobiasz'
                     git_email: 'jakub.tobiasz@icloud.com'
-                    repository_owner: 'jakubtobiasz'
-                    repository_name: 'monoplus-split-dummy'
-                    tag: ${{ steps.extract_tag.outputs.VERSION }}
+                    repository_owner: 'alphpaca'
+                    repository_name: 'monoplus-split-demo'
+                    tag: ${{ steps.extract_tag.outputs.TAG }}
