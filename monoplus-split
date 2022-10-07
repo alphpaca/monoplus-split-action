@@ -1,0 +1,99 @@
+#!/usr/bin/env php
+<?php
+
+use Alphpaca\MonoplusSplit\Configuration;
+use Alphpaca\MonoplusSplit\Filesystem;
+use Alphpaca\MonoplusSplit\Git;
+use Alphpaca\MonoplusSplit\Repository;
+use Alphpaca\MonoplusSplit\Shell;
+use Alphpaca\MonoplusSplit\Ssh;
+use Alphpaca\MonoplusSplit\Workspace;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Style\SymfonyStyle;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$io = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
+$config = Configuration::createFromEnv($_ENV);
+$shell = Shell::new();
+
+
+$io->title('Monoplus Split Action by Alphpaca');
+
+/**
+ * Setup Git
+ */
+$io->section('[1/7] Setting up Git');
+
+$git = Git::new($shell);
+$git->setup($config->gitUsername, $config->gitEmail);
+
+/**
+ * Setup SSH
+ */
+$io->section('[2/7] Setting up SSH');
+
+$ssh = Ssh::new($shell);
+$ssh->setup();
+
+$io->info(sprintf('Adding "%s" as a known host', $config->repositoryHost));
+$ssh->addToKnownHosts($config->repositoryHost);
+
+$io->info('Adding private key');
+$ssh->addPrivateKey($config->sshPrivateKey);
+
+/**
+ * Setting up a workspace
+ */
+$io->section('[3/7] Setting up a workspace');
+
+$workspace = Workspace::new(Filesystem::new(), uniqid());
+$workspace->copyFilesFrom(__DIR__);
+$workspace->goTo();
+
+/**
+ * Preparing the repository
+ */
+$io->section('[4/7] Preparing the repository');
+
+$repository = Repository::new($shell);
+$repository->removeRemote('origin');
+
+$io->info(sprintf('Adding "%s" as a remote', $config->sshRepositoryUrl()));
+
+$repository->addRemote($workspace->workspaceId, $config->sshRepositoryUrl());
+
+/**
+ * Filtering the package
+ */
+$io->section('[5/7] Filtering the package');
+
+$repository->filterPackage($config->packagePath);
+
+/**
+ * Pushing the package
+ */
+$io->section('[6/7] Pushing the package');
+
+if ('' !== $config->tag) {
+    $io->info('Skipping pushing changes as a tag is set');
+} else {
+    $repository->push($workspace->workspaceId, $config->targetBranch);
+
+    $io->success(sprintf('Package "%s" has been pushed to "%s" on "%s"', $config->packagePath, $config->targetBranch, $config->sshRepositoryUrl()));
+}
+
+/**
+ * Checking against new tag
+ */
+$io->section('[7/7] Checking against new tag');
+
+if ('' !== $config->tag) {
+    $io->info(sprintf('Tagging "%s"', $config->tag));
+    $repository->removeAllTags();
+    $repository->addTag($config->tag);
+    $repository->pushTag($workspace->workspaceId, $config->tag);
+} else {
+    $io->info('No tag specified, skipping');
+}

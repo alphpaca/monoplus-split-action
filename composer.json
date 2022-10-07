@@ -1,0 +1,33 @@
+{
+    "name": "alphpaca/monoplus-split",
+    "description": "GitHub Action helping you in splitting your monorepo into individual repositories.",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Alphpaca\\MonoplusSplit\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jakub Tobiasz",
+            "email": "jakub@alphpaca.io"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "webmozart/assert": "^1.11",
+        "symfony/console": "^6.1",
+        "symfony/filesystem": "^6.1"
+    },
+    "require-dev": {
+        "pestphp/pest": "^1.22",
+        "phpspec/prophecy": "^1.15",
+        "phpspec/prophecy-phpunit": "^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

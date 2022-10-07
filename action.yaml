@@ -1,0 +1,52 @@
+name: 'Monoplus Split'
+description: 'GitHub Action helping you in splitting your monorepo into individual repositories.'
+author: "Jakub Tobiasz <jakub@alphpaca.io>"
+
+inputs:
+    package_path:
+        description: 'Relative path to the package'
+        required: true
+    ssh_private_key:
+        description: 'Private Key used to push'
+        required: true
+    git_username:
+        description: 'Git Username'
+        required: true
+    git_email:
+        description: 'Git Email'
+        required: true
+    repository_host:
+        description: 'Split Repository Host'
+        default: 'github.com'
+        required: true
+    repository_owner:
+        description: 'Split Repository Owner'
+        required: true
+    repository_name:
+        description: 'Split Repository Name'
+        required: true
+    target_branch:
+        description: 'Split Repository Target Branch'
+        default: 'main'
+        required: true
+    tag:
+        description: 'Tag to be created'
+        required: false
+
+runs:
+    using: 'docker'
+    image: 'Dockerfile'
+    args:
+        - ${{ inputs.package_path }}
+        - ${{ inputs.ssh_private_key }}
+        - ${{ inputs.git_username }}
+        - ${{ inputs.git_email }}
+        - ${{ inputs.repository_host }}
+        - ${{ inputs.repository_owner }}
+        - ${{ inputs.repository_name }}
+        - ${{ inputs.target_branch }}
+        - ${{ inputs.tag }}
+
+branding:
+    icon: git-branch
+    color: blue
