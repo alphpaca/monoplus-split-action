@@ -30,6 +30,7 @@ jobs:
                     git_email: 'jakub.tobiasz@icloud.com'
                     repository_owner: 'alphpaca'
                     repository_name: 'monoplus-split-demo'
+                    debug: 'yes'
 
     split_with_tag:
         runs-on: ubuntu-latest
@@ -58,3 +59,4 @@ jobs:
                     repository_owner: 'alphpaca'
                     repository_name: 'monoplus-split-demo'
                     tag: ${{ steps.extract_tag.outputs.TAG }}
+                    debug: 'yes'
