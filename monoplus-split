@@ -21,6 +21,10 @@ $shell = Shell::new();
 
 $io->title('Monoplus Split Action by Alphpaca');
 
+if ($config->isDebug()) {
+    $io->info('Debug mode enabled');
+}
+
 /**
  * Setup Git
  */
@@ -28,6 +32,12 @@ $io->section('[1/7] Setting up Git');
 
 $git = Git::new($shell);
 $git->setup($config->gitUsername, $config->gitEmail);
+
+if ($config->isDebug()) {
+    $io->info(sprintf('Current directory is %s', getcwd()));
+    $io->info('Directory content is:');
+    print_r(scandir(getcwd()));
+}
 
 /**
  * Setup SSH
@@ -48,9 +58,19 @@ $ssh->addPrivateKey($config->sshPrivateKey);
  */
 $io->section('[3/7] Setting up a workspace');
 
+if ($config->isDebug()) {
+    $io->info(sprintf('__DIR__ value is: %s', __DIR__));
+}
+
 $workspace = Workspace::new(Filesystem::new(), uniqid());
 $workspace->copyFilesFrom(__DIR__);
 $workspace->goTo();
+
+if ($config->isDebug()) {
+    $io->info(sprintf('Current directory is %s', getcwd()));
+    $io->info('Directory content is:');
+    print_r(scandir(getcwd()));
+}
 
 /**
  * Preparing the repository

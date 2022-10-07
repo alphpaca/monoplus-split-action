@@ -16,6 +16,7 @@ final class Configuration
     const INPUT_REPOSITORY_OWNER = 'INPUT_REPOSITORY_OWNER';
     const INPUT_REPOSITORY_NAME = 'INPUT_REPOSITORY_NAME';
     const INPUT_TARGET_BRANCH = 'INPUT_TARGET_BRANCH';
+    const INPUT_DEBUG = 'INPUT_DEBUG';
     const INPUT_TAG = 'INPUT_TAG';
 
     public static function createFromEnv(array $environmentVariables): self
@@ -27,6 +28,7 @@ final class Configuration
         Assert::keyExists($environmentVariables, self::INPUT_REPOSITORY_HOST);
         Assert::keyExists($environmentVariables, self::INPUT_REPOSITORY_OWNER);
         Assert::keyExists($environmentVariables, self::INPUT_REPOSITORY_NAME);
+        Assert::keyExists($environmentVariables, self::INPUT_DEBUG);
         Assert::keyExists($environmentVariables, self::INPUT_TARGET_BRANCH);
 
         return new Configuration(
@@ -38,6 +40,7 @@ final class Configuration
             $environmentVariables[self::INPUT_REPOSITORY_OWNER],
             $environmentVariables[self::INPUT_REPOSITORY_NAME],
             $environmentVariables[self::INPUT_TARGET_BRANCH],
+            $environmentVariables[self::INPUT_DEBUG],
             $environmentVariables[self::INPUT_TAG] ?? null,
         );
     }
@@ -51,6 +54,7 @@ final class Configuration
         public readonly string $repositoryOwner,
         public readonly string $repositoryName,
         public readonly string $targetBranch,
+        public readonly string $debug,
         public readonly ?string $tag,
     ) {
     }
@@ -58,5 +62,10 @@ final class Configuration
     public function sshRepositoryUrl(): string
     {
         return sprintf('git@%s:%s/%s.git', $this->repositoryHost, $this->repositoryOwner, $this->repositoryName);
+    }
+
+    public function isDebug(): bool
+    {
+        return 'yes' === $this->debug;
     }
 }
