@@ -59,12 +59,8 @@ $ssh->addPrivateKey($config->sshPrivateKey);
  */
 $io->section('[3/7] Setting up a workspace');
 
-if ($config->isDebug()) {
-    $io->info(sprintf('__DIR__ value is: %s', __DIR__));
-}
-
 $workspace = Workspace::new(Filesystem::new(), uniqid());
-$workspace->copyFilesFrom(__DIR__);
+$workspace->copyFilesFrom(Shell::GITHUB_WORKSPACE_DIR);
 $workspace->goTo();
 
 if ($config->isDebug()) {
