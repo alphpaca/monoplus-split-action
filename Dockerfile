@@ -1,14 +1,11 @@
-FROM composer:2.4 AS composer
+FROM php:8.1-cli-alpine
 
-FROM php:8.1-cli
+COPY --from=composer/composer:2-bin /composer /usr/bin/composer
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+RUN apk update; \
+    apk add --no-cache git python3 py3-pip openssh;
 
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
-
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list; \
-    apt-get update -y; \
-    apt-get install python3 git git-filter-repo -y;
+RUN pip3 install git-filter-repo
 
 WORKDIR /app
 
