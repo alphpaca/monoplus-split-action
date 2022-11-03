@@ -16,7 +16,6 @@ final class Configuration
     const INPUT_REPOSITORY_OWNER = 'INPUT_REPOSITORY_OWNER';
     const INPUT_REPOSITORY_NAME = 'INPUT_REPOSITORY_NAME';
     const INPUT_TARGET_BRANCH = 'INPUT_TARGET_BRANCH';
-    const INPUT_DEBUG = 'INPUT_DEBUG';
     const INPUT_TAG = 'INPUT_TAG';
     const YES = 'yes';
     const NO = 'no';
@@ -41,7 +40,6 @@ final class Configuration
             $environmentVariables[self::INPUT_REPOSITORY_OWNER],
             $environmentVariables[self::INPUT_REPOSITORY_NAME],
             $environmentVariables[self::INPUT_TARGET_BRANCH],
-            $environmentVariables[self::INPUT_DEBUG] ?? self::NO,
             $environmentVariables[self::INPUT_TAG] ?? null,
         );
     }
@@ -55,7 +53,6 @@ final class Configuration
         public readonly string $repositoryOwner,
         public readonly string $repositoryName,
         public readonly string $targetBranch,
-        public readonly string $debug = self::NO,
         public readonly ?string $tag = null,
     ) {
     }
@@ -63,10 +60,5 @@ final class Configuration
     public function sshRepositoryUrl(): string
     {
         return sprintf('git@%s:%s/%s.git', $this->repositoryHost, $this->repositoryOwner, $this->repositoryName);
-    }
-
-    public function isDebug(): bool
-    {
-        return 'yes' === $this->debug;
     }
 }

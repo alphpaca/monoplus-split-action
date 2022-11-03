@@ -32,10 +32,6 @@ inputs:
     tag:
         description: 'Tag to be created'
         required: false
-    debug:
-        description: 'Display additional data while running'
-        default: 'no'
-        required: false
 
 runs:
     using: 'docker'
@@ -50,7 +46,6 @@ runs:
         - ${{ inputs.repository_name }}
         - ${{ inputs.target_branch }}
         - ${{ inputs.tag }}
-        - ${{ inputs.debug }}
 
 branding:
     icon: git-branch
