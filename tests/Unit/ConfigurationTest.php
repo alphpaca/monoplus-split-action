@@ -14,17 +14,17 @@ it('throws exception when required environment variable is empty', function (str
     ;
 })->with(array_keys(getExampleEnvironmentVariables()));
 
-it('returns SSH repository URL', function () {
+it('returns repository URL', function () {
     $configuration = Configuration::createFromEnv(getExampleEnvironmentVariables());
 
-    expect($configuration->sshRepositoryUrl())->toBe('git@repository-host:repository-owner/repository-name.git');
+    expect($configuration->repositoryUrl())->toBe('https://git-username:personal-access-token@repository-host/repository-owner/repository-name.git');
 });
 
 function getExampleEnvironmentVariables(): array
 {
     return [
         'INPUT_PACKAGE_PATH' => 'package',
-        'INPUT_SSH_PRIVATE_KEY' => 'ssh-private-key',
+        'INPUT_PERSONAL_ACCESS_TOKEN' => 'personal-access-token',
         'INPUT_GIT_USERNAME' => 'git-username',
         'INPUT_GIT_EMAIL' => 'git-email',
         'INPUT_REPOSITORY_HOST' => 'repository-host',
