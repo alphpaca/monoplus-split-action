@@ -6,8 +6,8 @@ inputs:
     package_path:
         description: 'Relative path to the package'
         required: true
-    ssh_private_key:
-        description: 'Private Key used to push'
+    personal_access_token:
+        description: 'Personal Access Token to be used'
         required: true
     git_username:
         description: 'Git Username'
@@ -38,7 +38,7 @@ runs:
     image: 'Dockerfile'
     args:
         - ${{ inputs.package_path }}
-        - ${{ inputs.ssh_private_key }}
+        - ${{ inputs.personal_access_token }}
         - ${{ inputs.git_username }}
         - ${{ inputs.git_email }}
         - ${{ inputs.repository_host }}

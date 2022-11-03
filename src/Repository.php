@@ -25,6 +25,11 @@ final class Repository
         $this->shell->exec(sprintf('git remote remove %s', $remoteName));
     }
 
+    public function removeExtraHeader(string $url): void
+    {
+        $this->shell->exec(sprintf('git config --local --unset-all http.%s.extraheader', $url));
+    }
+
     public function filterPackage(string $packageName): void
     {
         $this->shell->exec(sprintf('git filter-repo --subdirectory-filter %s --force', $packageName));

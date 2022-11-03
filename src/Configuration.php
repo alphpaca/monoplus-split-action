@@ -9,7 +9,7 @@ use Webmozart\Assert\Assert;
 final class Configuration
 {
     const INPUT_PACKAGE_PATH = 'INPUT_PACKAGE_PATH';
-    const INPUT_SSH_PRIVATE_KEY = 'INPUT_SSH_PRIVATE_KEY';
+    const INPUT_PERSONAL_ACCESS_TOKEN = 'INPUT_PERSONAL_ACCESS_TOKEN';
     const INPUT_GIT_USERNAME = 'INPUT_GIT_USERNAME';
     const INPUT_GIT_EMAIL = 'INPUT_GIT_EMAIL';
     const INPUT_REPOSITORY_HOST = 'INPUT_REPOSITORY_HOST';
@@ -17,13 +17,11 @@ final class Configuration
     const INPUT_REPOSITORY_NAME = 'INPUT_REPOSITORY_NAME';
     const INPUT_TARGET_BRANCH = 'INPUT_TARGET_BRANCH';
     const INPUT_TAG = 'INPUT_TAG';
-    const YES = 'yes';
-    const NO = 'no';
 
     public static function createFromEnv(array $environmentVariables): self
     {
         Assert::keyExists($environmentVariables, self::INPUT_PACKAGE_PATH);
-        Assert::keyExists($environmentVariables, self::INPUT_SSH_PRIVATE_KEY);
+        Assert::keyExists($environmentVariables, self::INPUT_PERSONAL_ACCESS_TOKEN);
         Assert::keyExists($environmentVariables, self::INPUT_GIT_USERNAME);
         Assert::keyExists($environmentVariables, self::INPUT_GIT_EMAIL);
         Assert::keyExists($environmentVariables, self::INPUT_REPOSITORY_HOST);
@@ -33,7 +31,7 @@ final class Configuration
 
         return new Configuration(
             $environmentVariables[self::INPUT_PACKAGE_PATH],
-            $environmentVariables[self::INPUT_SSH_PRIVATE_KEY],
+            $environmentVariables[self::INPUT_PERSONAL_ACCESS_TOKEN],
             $environmentVariables[self::INPUT_GIT_USERNAME],
             $environmentVariables[self::INPUT_GIT_EMAIL],
             $environmentVariables[self::INPUT_REPOSITORY_HOST],
@@ -46,7 +44,7 @@ final class Configuration
 
     private function __construct(
         public readonly string $packagePath,
-        public readonly string $sshPrivateKey,
+        public readonly string $personalAccessToken,
         public readonly string $gitUsername,
         public readonly string $gitEmail,
         public readonly string $repositoryHost,
@@ -57,8 +55,15 @@ final class Configuration
     ) {
     }
 
-    public function sshRepositoryUrl(): string
+    public function repositoryUrl(): string
     {
-        return sprintf('git@%s:%s/%s.git', $this->repositoryHost, $this->repositoryOwner, $this->repositoryName);
+        return sprintf(
+            'https://%s:%s@%s/%s/%s.git',
+            $this->gitUsername,
+            $this->personalAccessToken,
+            $this->repositoryHost,
+            $this->repositoryOwner,
+            $this->repositoryName,
+        );
     }
 }
