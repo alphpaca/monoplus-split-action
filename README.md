@@ -35,7 +35,7 @@ jobs:
             uses: "alphpaca/monoplus-split-action@2022.1"
             with:
                 package_path: 'path/to/your/package' #required
-                ssh_private_key: ${{ secrets.PACKAGE_DEPLOY_KEY }} # required
+                personal_access_token: ${{ secrets.PAT }} # required
                 git_username: 'jakubtobiasz' # required
                 git_email: 'jakub@alphpaca.io' # required
                 repository_host: 'github.com' # "github.com" is a default value, there is no need to set it explicitly
@@ -56,7 +56,7 @@ jobs:
             uses: "alphpaca/monoplus-split-action@2022.1"
             with:
                 package_path: 'path/to/your/package' #required
-                ssh_private_key: ${{ secrets.PACKAGE_DEPLOY_KEY }} # required
+                personal_access_token: ${{ secrets.PAT }} # required
                 git_username: 'jakubtobiasz' # required
                 git_email: 'jakub@alphpaca.io' # required
                 repository_host: 'github.com' # "github.com" is a default value, there is no need to set it explicitly
@@ -65,8 +65,6 @@ jobs:
                 target_branch: "main" # "main" is a default value, there is no need to set it explicitly
                 tag: ${{ steps.extract_tag.outputs.TAG }} # optional, used only when we want to tag a new version
 ```
-
-`PACKAGE_DEPLOY_KEY` can be both standard SSH associated with GitHub account, but also a GitHub deploy key can be used, what is recommended by us.
 
 ## 👋🏼 About Alphpaca
 
