@@ -32,6 +32,11 @@ final class Repository
 
     public function filterPackage(string $packageName): void
     {
+        if ('' === $this->shell->exec('git tag -l')) {
+            $this->shell->exec(sprintf('git filter-repo --subdirectory-filter %s --force', $packageName));
+            return;
+        }
+
         $this->shell->exec(sprintf('git filter-repo --subdirectory-filter %s --refs $branch $(git tag -l) --force', $packageName));
     }
 
