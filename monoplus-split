@@ -25,7 +25,7 @@ $io->title('Monoplus Split Action by Alphpaca');
 /**
  * Setup Git
  */
-$io->section('[1/6] Setting up Git');
+$io->section('[1/5] Setting up Git');
 
 $shell->exec('chmod 0777 . -R');
 $git = Git::new($shell);
@@ -34,7 +34,7 @@ $git->setup($config->gitUsername, $config->gitEmail);
 /**
  * Setting up a workspace
  */
-$io->section('[2/6] Setting up a workspace');
+$io->section('[2/5] Setting up a workspace');
 
 $workspace = Workspace::new(Filesystem::new(), uniqid());
 $workspace->copyFilesFrom(Shell::GITHUB_WORKSPACE_DIR);
@@ -43,7 +43,7 @@ $workspace->goTo();
 /**
  * Filtering the package
  */
-$io->section('[3/6] Filtering the package');
+$io->section('[3/5] Filtering the package');
 
 $repository = Repository::new($shell);
 $repository->filterPackage($config->packagePath);
@@ -51,7 +51,7 @@ $repository->filterPackage($config->packagePath);
 /**
  * Preparing the repository
  */
-$io->section('[4/6] Preparing the repository');
+$io->section('[4/5] Preparing the repository');
 
 $repository->removeExtraHeader('https://github.com/');
 $repository->addRemote($workspace->workspaceId, $repositoryUrl);
@@ -59,26 +59,8 @@ $repository->addRemote($workspace->workspaceId, $repositoryUrl);
 /**
  * Pushing the package
  */
-$io->section('[5/6] Pushing the package');
+$io->section('[5/5] Pushing the package');
 
-if ('' !== $config->tag) {
-    $io->info('Skipping pushing changes as a tag is set');
-} else {
-    $repository->push($workspace->workspaceId, $config->targetBranch);
+$repository->push($workspace->workspaceId, $config->targetBranch);
 
-    $io->success(sprintf('Package "%s" has been pushed to "%s" branch', $config->packagePath, $config->targetBranch));
-}
-
-/**
- * Checking against new tag
- */
-$io->section('[6/6] Checking against new tag');
-
-if ('' !== $config->tag) {
-    $io->info(sprintf('Tagging "%s"', $config->tag));
-    $repository->removeAllTags();
-    $repository->addTag($config->tag);
-    $repository->pushTag($workspace->workspaceId, $config->tag);
-} else {
-    $io->info('No tag specified, skipping');
-}
+$io->success(sprintf('Package "%s" has been pushed to "%s" branch', $config->packagePath, $config->targetBranch));

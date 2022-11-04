@@ -16,7 +16,6 @@ final class Configuration
     const INPUT_REPOSITORY_OWNER = 'INPUT_REPOSITORY_OWNER';
     const INPUT_REPOSITORY_NAME = 'INPUT_REPOSITORY_NAME';
     const INPUT_TARGET_BRANCH = 'INPUT_TARGET_BRANCH';
-    const INPUT_TAG = 'INPUT_TAG';
 
     public static function createFromEnv(array $environmentVariables): self
     {
@@ -38,7 +37,6 @@ final class Configuration
             $environmentVariables[self::INPUT_REPOSITORY_OWNER],
             $environmentVariables[self::INPUT_REPOSITORY_NAME],
             $environmentVariables[self::INPUT_TARGET_BRANCH],
-            $environmentVariables[self::INPUT_TAG] ?? null,
         );
     }
 
@@ -51,7 +49,6 @@ final class Configuration
         public readonly string $repositoryOwner,
         public readonly string $repositoryName,
         public readonly string $targetBranch,
-        public readonly ?string $tag = null,
     ) {
     }
 
