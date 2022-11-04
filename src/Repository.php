@@ -32,27 +32,12 @@ final class Repository
 
     public function filterPackage(string $packageName): void
     {
-        $this->shell->exec(sprintf('git filter-repo --subdirectory-filter %s --force', $packageName));
+        $this->shell->exec(sprintf('git filter-repo --subdirectory-filter %s --refs $branch $(git tag -l) --force', $packageName));
     }
 
     public function push(string $remoteName, string $targetBranch): void
     {
-        $this->shell->exec(sprintf('git push %s %s:%s --force', $remoteName, $this->getCurrentBranchName(), $targetBranch));
-    }
-
-    public function addTag(string $tagName): void
-    {
-        $this->shell->exec(sprintf('git tag %s', $tagName));
-    }
-
-    public function removeAllTags(): void
-    {
-        $this->shell->exec('git tag -d $(git tag -l)');
-    }
-
-    public function pushTag(string $remoteName, string $tagName): void
-    {
-        $this->shell->exec(sprintf('git push %s %s', $remoteName, $tagName));
+        $this->shell->exec(sprintf('git push %s %s:%s --tags --force', $remoteName, $this->getCurrentBranchName(), $targetBranch));
     }
 
     private function getCurrentBranchName(): string
