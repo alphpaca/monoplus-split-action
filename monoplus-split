@@ -18,6 +18,7 @@ $io = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
 $config = Configuration::createFromEnv($_ENV);
 $repositoryUrl = $config->repositoryUrl();
 $shell = Shell::new();
+$currentBranchName = $shell->exec('git branch --show-current');
 
 
 $io->title('Monoplus Split Action by Alphpaca');
@@ -46,7 +47,7 @@ $workspace->goTo();
 $io->section('[3/5] Filtering the package');
 
 $repository = Repository::new($shell);
-$repository->filterPackage($config->packagePath);
+$repository->filterPackage($config->packagePath, $currentBranchName);
 
 /**
  * Preparing the repository
@@ -61,6 +62,6 @@ $repository->addRemote($workspace->workspaceId, $repositoryUrl);
  */
 $io->section('[5/5] Pushing the package');
 
-$repository->push($workspace->workspaceId, $config->targetBranch);
+$repository->push($workspace->workspaceId, $currentBranchName, $config->targetBranch);
 
 $io->success(sprintf('Package "%s" has been pushed to "%s" branch', $config->packagePath, $config->targetBranch));

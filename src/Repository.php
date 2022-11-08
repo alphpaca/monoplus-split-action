@@ -30,25 +30,24 @@ final class Repository
         $this->shell->exec(sprintf('git config --local --unset-all http.%s.extraheader', $url));
     }
 
-    public function filterPackage(string $packageName): void
+    public function filterPackage(string $packagePath, string $branchName): void
     {
         if ('' === $this->shell->exec('git tag -l')) {
-            $this->shell->exec(sprintf('git filter-repo --subdirectory-filter %s --force --no-ff', $packageName));
+            $this->shell->exec(sprintf('git filter-repo --subdirectory-filter %s --force --no-ff', $packagePath));
             return;
         }
 
         $this->shell->exec(
-            sprintf('git filter-repo --subdirectory-filter %s --refs $branch $(git tag -l) --force  --no-ff', $packageName)
+            sprintf(
+                'git filter-repo --subdirectory-filter %s --refs %s $(git tag -l) --force  --no-ff',
+                $packagePath,
+                $branchName
+            )
         );
     }
 
-    public function push(string $remoteName, string $targetBranch): void
+    public function push(string $remoteName, string $currentBranchName, string $targetBranch): void
     {
-        $this->shell->exec(sprintf('git push %s %s:%s --tags --force', $remoteName, $this->getCurrentBranchName(), $targetBranch));
-    }
-
-    private function getCurrentBranchName(): string
-    {
-        return $this->shell->exec('git branch --show-current');
+        $this->shell->exec(sprintf('git push %s %s:%s --tags --force', $remoteName, $currentBranchName, $targetBranch));
     }
 }
