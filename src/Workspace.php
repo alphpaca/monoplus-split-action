@@ -21,6 +21,16 @@ final class Workspace
         public readonly string $path,
     ) { }
 
+    public function getId(): string
+    {
+        return $this->workspaceId;
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
     public function copyFilesFrom(string $path): void
     {
         $this->filesystem->mirror($path, $this->path);
