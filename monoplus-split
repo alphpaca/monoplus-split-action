@@ -18,7 +18,6 @@ $io = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
 $config = Configuration::createFromEnv($_ENV);
 $repositoryUrl = $config->repositoryUrl();
 $shell = Shell::new();
-$currentBranchName = $shell->exec('git branch --show-current');
 
 
 $io->title('Monoplus Split Action by Alphpaca');
@@ -38,14 +37,18 @@ $git->setup($config->gitUsername, $config->gitEmail);
 $io->section('[2/5] Setting up a workspace');
 
 $workspace = Workspace::new(Filesystem::new(), uniqid());
+$io->info(sprintf('Created workspace %s', $workspace->getId()));
 $workspace->copyFilesFrom(Shell::GITHUB_WORKSPACE_DIR);
 $workspace->goTo();
+$io->info(sprintf('Changed current directory to "%s"', $workspace->getPath()));
 
 /**
  * Filtering the package
  */
 $io->section('[3/5] Filtering the package');
 
+$currentBranchName = $shell->exec('git branch --show-current');
+$io->info(sprintf('Current branch is "%s"', $currentBranchName));
 $repository = Repository::new($shell);
 $repository->filterPackage($config->packagePath, $currentBranchName);
 
