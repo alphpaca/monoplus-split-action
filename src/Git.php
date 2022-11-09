@@ -19,5 +19,6 @@ final class Git
     {
         $this->shell->exec(sprintf('git config --global user.name "%s"', $username));
         $this->shell->exec(sprintf('git config --global user.email "%s"', $email));
+        $this->shell->exec('git config --global --add safe.directory /github/workspace');
     }
 }
