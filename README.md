@@ -3,11 +3,21 @@
         <img src="https://github.com/alphpaca/.github/blob/main/banners/monoplus-split-action.png?raw=true" />
     </a>
 </p>
+<h1 align="center">Welcome to Monoplus Split Action 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-2022.1-blue.svg?cacheSeconds=2592000" />
+  <a href="https://github.com/alphpaca/monoplus-split-action/wiki" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="#" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+  <a href="https://twitter.com/jakub_tobiasz" target="_blank">
+    <img alt="Twitter: jakub_tobiasz" src="https://img.shields.io/twitter/follow/jakub_tobiasz.svg?style=social" />
+  </a>
+</p>
 
-# Monoplus Split Action
-
-Monoplus Split Action is highly inspired by [GitHub Action for Monorepo Split](https://github.com/symplify/monorepo-split-github-action) created by [Tomas Votruba](https://github.com/TomasVotruba).
-The idea to create this tool has born while creating a monorepo project. Monoplus Split Action is a mix of `GitHub Action for Monorepo Split`, needs discovered while creating monorepo for [Sylius Plus](https://sylius.com/plus/) and my approach to writing code.
+> GitHub Action helping you in splitting your monorepo into individual repositories.
 
 ## 🔑 Key features
 
@@ -17,56 +27,30 @@ The idea is not complicated - you have a monorepo and you want to split it into 
 👉🏼 Unit tested code  
 👉🏼 While splitting the original history of commits is preserved (for the scope of the split package)
 
-**The most important feature is the last one.** Instead of taking all changes and commit them within a single commit we select those commit which are related to the split package. This way we preserve the original history of commits every time (so we reflect any changed made via `git rebase` too).
+**The most important feature is the last one.** Instead of taking all changes and commit them within a single commit we select
 
 ## ⚙️ How to use
 
-```yaml
-# ...
-jobs:
-    # ...
-    steps:
-        # ...
-        
-        # when no "tag" is set then changes are pushed
-        -
-            if: "!startsWith(github.ref, 'refs/tags/')"
-            name: "Split (No Tag)"
-            uses: "alphpaca/monoplus-split-action@2022.1"
-            with:
-                package_path: 'path/to/your/package' #required
-                personal_access_token: ${{ secrets.PAT }} # required
-                git_username: 'jakubtobiasz' # required
-                git_email: 'jakub@alphpaca.io' # required
-                repository_host: 'github.com' # "github.com" is a default value, there is no need to set it explicitly
-                repository_owner: "jakubtobiasz" # required
-                repository_name: "monoplus-split-dummy" # required
-                target_branch: "main" # "main" is a default value, there is no need to set it explicitly
+Check out the [documentation](https://github.com/alphpaca/monoplus-split-action/wiki/00.-Getting-started) 👀.
 
-        # when "tag" is set then no changes are pushed, only tag
-        -
-            if: "startsWith(github.ref, 'refs/tags/')"
-            name: Extract tag
-            id: extract_tag
-            run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
-        
-        -
-            if: "startsWith(github.ref, 'refs/tags/')"
-            name: "Split (Tag)"
-            uses: "alphpaca/monoplus-split-action@2022.1"
-            with:
-                package_path: 'path/to/your/package' #required
-                personal_access_token: ${{ secrets.PAT }} # required
-                git_username: 'jakubtobiasz' # required
-                git_email: 'jakub@alphpaca.io' # required
-                repository_host: 'github.com' # "github.com" is a default value, there is no need to set it explicitly
-                repository_owner: "jakubtobiasz" # required
-                repository_name: "monoplus-split-dummy" # required
-                target_branch: "main" # "main" is a default value, there is no need to set it explicitly
-                tag: ${{ steps.extract_tag.outputs.TAG }} # optional, used only when we want to tag a new version
-```
+## ✍️ Author
 
-## 👋🏼 About Alphpaca
+👤 **Jakub Tobiasz**
+
+* Website: https://jakubtobiasz.com
+* Twitter: [@jakub\_tobiasz](https://twitter.com/jakub\_tobiasz)
+* Github: [@jakubtobiasz](https://github.com/jakubtobiasz)
+* LinkedIn: [@jakubtobiasz](https://linkedin.com/in/jakubtobiasz)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/alphpaca/monoplus-split-action/issues). 
+
+## 🫶 Show your support
+
+Give a ⭐️ if this project helped you!
+
+## 👋 About Alphpaca
 
 **Alphpaca** (pronounced /ˈælphəkə/) is a software house based in Poland. We are a team of experienced developers who are passionate about open source and e-commerce. We are the creators of tools making developer's life easier and plugins for the [Sylius e-commerce platform](https://sylius.com).
 
