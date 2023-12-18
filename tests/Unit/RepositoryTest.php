@@ -23,13 +23,14 @@ it('removes a remote', function () {
     $repository->removeRemote('some-origin');
 });
 
-it('filter package', function () {
+it('filters package', function () {
     $shell = $this->prophesize(ShellInterface::class);
 
-    $shell->exec('git filter-repo --subdirectory-filter some-package --refs $branch $(git tag -l) --force')->shouldBeCalled();
+    $shell->exec('git tag -l')->willReturn('not an empty string');
+    $shell->exec('git filter-repo --subdirectory-filter some-package --refs some-branch $(git tag -l) --force --no-ff')->shouldBeCalled();
 
     $repository = new Repository($shell->reveal());
-    $repository->filterPackage('some-package');
+    $repository->filterPackage('some-package', 'some-branch');
 });
 
 it('pushes to a remote', function () {
@@ -39,5 +40,5 @@ it('pushes to a remote', function () {
     $shell->exec('git push remote-name current-branch:target-branch --tags --force')->shouldBeCalled();
 
     $repository = new Repository($shell->reveal());
-    $repository->push('remote-name', 'target-branch');
+    $repository->push('remote-name', 'current-branch', 'target-branch');
 });

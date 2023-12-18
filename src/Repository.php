@@ -39,7 +39,7 @@ final class Repository
 
         $this->shell->exec(
             sprintf(
-                'git filter-repo --subdirectory-filter %s --refs %s $(git tag -l) --force  --no-ff',
+                'git filter-repo --subdirectory-filter %s --refs %s $(git tag -l) --force --no-ff',
                 $packagePath,
                 $branchName
             )
