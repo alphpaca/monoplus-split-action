@@ -27,7 +27,7 @@ it('filters package', function () {
     $shell = $this->prophesize(ShellInterface::class);
 
     $shell->exec('git tag -l')->willReturn('not an empty string');
-    $shell->exec('git filter-repo --subdirectory-filter some-package --refs some-branch $(git tag -l) --force --no-ff')->shouldBeCalled();
+    $shell->exec('pipx run -- git-filter-repo --subdirectory-filter some-package --refs some-branch $(git tag -l) --force --no-ff')->shouldBeCalled();
 
     $repository = new Repository($shell->reveal());
     $repository->filterPackage('some-package', 'some-branch');

@@ -33,13 +33,13 @@ final class Repository
     public function filterPackage(string $packagePath, string $branchName): void
     {
         if ('' === $this->shell->exec('git tag -l')) {
-            $this->shell->exec(sprintf('git filter-repo --subdirectory-filter %s --force --no-ff', $packagePath));
+            $this->shell->exec(sprintf('pipx run -- git-filter-repo --subdirectory-filter %s --force --no-ff', $packagePath));
             return;
         }
 
         $this->shell->exec(
             sprintf(
-                'git filter-repo --subdirectory-filter %s --refs %s $(git tag -l) --force --no-ff',
+                'pipx run -- git-filter-repo --subdirectory-filter %s --refs %s $(git tag -l) --force --no-ff',
                 $packagePath,
                 $branchName
             )
