@@ -58,12 +58,18 @@ $repository->filterPackage($config->packagePath, $currentBranchName);
 $io->section('[4/5] Preparing the repository');
 
 $repository->removeExtraHeader('https://github.com/');
+$io->info('Removed extra header from the repository URL');
+$io->info(sprintf('Adding remote "%s" with URL "%s"', $workspace->workspaceId, $repositoryUrl));
 $repository->addRemote($workspace->workspaceId, $repositoryUrl);
+$io->info(sprintf('Remote "%s" has been added', $workspace->workspaceId));
 
 /**
  * Pushing the package
  */
 $io->section('[5/5] Pushing the package');
+
+$io->info(sprintf('Pushing package "%s" to "%s" branch', $config->packagePath, $config->targetBranch));
+$io->info(sprintf('Workspace ID: %s, Current branch: %s, Target branch: %s', $workspace->workspaceId, $currentBranchName, $config->targetBranch));
 
 $repository->push($workspace->workspaceId, $currentBranchName, $config->targetBranch);
 
